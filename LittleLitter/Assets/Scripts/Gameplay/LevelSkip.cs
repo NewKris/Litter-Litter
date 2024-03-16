@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace CoffeeBara.Gameplay {
     public class LevelSkip : MonoBehaviour {
-        public void SkipLevel() {
-            
+        public static event Action<Level> OnLoadLevel; 
+        
+        public void SkipLevel(Level level) {
+            OnLoadLevel?.Invoke(level);
         }
     }
 }

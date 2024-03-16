@@ -17,11 +17,9 @@ namespace CoffeeBara.Gameplay {
 
             ILoadTask.OnLoadTaskSpawned += QueueLoadTask;
             PendingLoadTasks = new Queue<ILoadTask>();
-            AsyncOperation loadLevel = SceneManager.LoadSceneAsync((int)defaultSave.save.level, LoadSceneMode.Additive);
-            while (!loadLevel.isDone) await Task.Delay(100);
 
             while (PendingLoadTasks.Count > 0) {
-                await PendingLoadTasks.Dequeue().Load();
+                await PendingLoadTasks.Dequeue().Load(defaultSave.save);
             }
             
             ILoadTask.OnLoadTaskSpawned -= QueueLoadTask;

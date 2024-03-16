@@ -3,55 +3,24 @@ using CoffeeBara.Core.Configuration;
 using UnityEngine;
 
 namespace CoffeeBara.Gameplay.Scavenge {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerCharacter : MonoBehaviour {
         [Header("Movement")]
         public float moveSpeed;
-        public float turnSpeed;
         
-        [Header("Jump")]
-        public float jumpHeight;
-        public float jumpTime;
-
-        private float _gravity;
-        private float _jumpVelocity;
-        private float _verticalVelocity;
-        private float _angularVelocity;
-        private CharacterController _characterController;
+        private Rigidbody2D _rigidBody;
+        private PlayerControls _controls;
 
         private void Awake() {
-            float t = jumpTime * 0.5f;
-            _gravity = (-2 * jumpHeight) / (t * t);
-            _jumpVelocity = (2 * jumpHeight) / t;
-            _characterController = GetComponent<CharacterController>();
+            _rigidBody = GetComponent<Rigidbody2D>();
+            _controls = new PlayerControls();
+            _controls.Locomotion.Enable();
         }
 
         private void Update() {
-            _verticalVelocity += _gravity * Time.deltaTime;
-            
-            if (Input.GetKeyDown(KeyCode.Space)) Jump();
-            
-            Vector2 movementInput = new Vector2(
-                Input.GetAxisRaw("Horizontal"),
-                Input.GetAxisRaw("Vertical")
-            );
+            Vector2 velocity = _controls.Locomotion.Move.ReadValue<Vector2>() * moveSpeed;
 
-            Vector3 velocity = new Vector3(movementInput.x, 0, movementInput.y).normalized * moveSpeed;
-            velocity.y = _verticalVelocity;
-            
-            _characterController.Move(velocity * Time.deltaTime);
-            
-            if (movementInput == Vector2.zero) return;
-
-            float targetRot = Mathf.Atan2(movementInput.x, movementInput.y) * Mathf.Rad2Deg;
-            float currentRot = transform.rotation.eulerAngles.y;
-            float yRot = Mathf.SmoothDampAngle(currentRot, targetRot, ref _angularVelocity, turnSpeed);
-            
-            transform.rotation = Quaternion.Euler(0, yRot, 0);
-        }
-
-        private void Jump() {
-            _verticalVelocity = _jumpVelocity;
+            _rigidBody.velocity = velocity;
         }
     }
 }

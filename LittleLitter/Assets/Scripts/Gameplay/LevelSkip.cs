@@ -5,8 +5,8 @@ namespace CoffeeBara.Gameplay {
     public class LevelSkip : MonoBehaviour {
         public static event Action<Level> OnLoadLevel; 
         
-        public void SkipLevel(Level level) {
-            OnLoadLevel?.Invoke(level);
+        public void SkipLevel(int level) {
+            OnLoadLevel?.Invoke((Level)level);
         }
     }
 }

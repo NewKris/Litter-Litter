@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Levels/Scavenge.unity
     guid: 91fcfea5ece21d3459276e19bf7f8389
   - enabled: 1
+    path: Assets/Scenes/Levels/Repair.unity
+    guid: d0124b0a986c9084b83217c7dc873ad0
+  - enabled: 1
     path: Assets/Scenes/Levels/Trade.unity
     guid: 756302fd034a78e4fbd5dd1d7df0e097
   - enabled: 1

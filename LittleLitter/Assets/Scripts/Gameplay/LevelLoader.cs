@@ -13,12 +13,12 @@ namespace CoffeeBara.Gameplay {
         private Level _currentLevel;
         
         public async Task Load(Save save) {
-            AsyncOperation loadLevel = SceneManager.LoadSceneAsync((int)save.level);
+            _currentLevel = save.level;
+            AsyncOperation loadLevel = SceneManager.LoadSceneAsync((int)save.level, LoadSceneMode.Additive);
             while (!loadLevel.isDone) await Task.Delay(100);
         }
-        
+
         private void Awake() {
-            (this as ILoadTask).QueueTask(this);
             LevelSkip.OnLoadLevel += LoadLevel;
         }
 
@@ -33,7 +33,13 @@ namespace CoffeeBara.Gameplay {
         private IEnumerator LoadLevelAsync(Level level) {
             yield return blackScreen.FadeOut(0.5f, 0.1f);
 
-            
+            AsyncOperation unloadLevel = SceneManager.UnloadSceneAsync((int)_currentLevel);
+            while (!unloadLevel.isDone) yield return null;
+
+            AsyncOperation loadLevel = SceneManager.LoadSceneAsync((int)level, LoadSceneMode.Additive);
+            while (!loadLevel.isDone) yield return null;
+
+            _currentLevel = level;
             
             yield return blackScreen.FadeIn(0.5f, 0.1f);
         }

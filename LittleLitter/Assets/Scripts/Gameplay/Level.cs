@@ -1,7 +1,8 @@
 ﻿namespace CoffeeBara.Gameplay {
     public enum Level {
         SCAVENGE = 4,
-        TRADE = 5,
-        FEED = 6
+        REPAIR = 5,
+        TRADE = 6,
+        FEED = 7
     }
 }
